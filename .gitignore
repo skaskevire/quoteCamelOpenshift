@@ -1,8 +1,8 @@
-quote/bin/
-quote/.settings/
-quote/.classpath
-quote/.project
-quote/target/classes
-quote/target/generated-sources
-quote/target/maven-archiver
-quote/target/maven-status
+*/bin/
+*/.settings/
+*/.classpath
+*/.project
+*/target/classes
+*/target/generated-sources
+*/target/maven-archiver
+*/target/maven-status
