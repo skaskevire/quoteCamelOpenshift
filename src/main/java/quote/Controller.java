@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class Controller {
 
 	@RequestMapping(path = "/getQuote", method = RequestMethod.GET)
-	public String getQuote() {
-		return new Date().toString();
+	public Quote getQuote() {
+		return new Quote(new Date().toString());
 	}
 
 }
