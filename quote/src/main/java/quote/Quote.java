@@ -1,14 +1,21 @@
 package quote;
 
 public class Quote {
-	public String getDate() {
-		return  date;
-	}
 
 	private String date;
+	private String port;
 
-	public Quote(String date) {
+	public Quote(String date, String port) {
 		super();
 		this.date = date;
+		this.port = port;
+	}
+
+	public String getPort() {
+		return port;
+	}
+	
+	public String getDate() {
+		return  date;
 	}
 }
