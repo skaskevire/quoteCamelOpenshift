@@ -14,5 +14,11 @@ public class Controller {
 	public Quote getQuote() {
 		return new Quote(new Date().toString());
 	}
+	
+
+	@RequestMapping(path = "/", method = RequestMethod.GET)
+	  public String home() {
+	    return "Hi!";
+	  }
 
 }
