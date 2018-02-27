@@ -1,0 +1,28 @@
+version: '3.3'
+services:
+  quote-core:
+    image: skaskevire/quote-core:1.0
+    build:
+      context: ./quote
+    ports:
+      - 9000
+    volumes:
+      - /opt/log:/home
+  quote-admin:
+    image: skaskevire/quote-admin:1.0
+    build:
+      context: ./admin
+    ports:
+      - 8080:8080
+  quote-eureka:
+    image: skaskevire/quote-eureka:1.0
+    build:
+      context: ./eureka
+    ports:
+      - 8761:8761
+  quote-ribbon:
+    image: skaskevire/quote-ribbon:1.0
+    build:
+      context: ./ribbon
+    ports:
+      - 8888:8888
