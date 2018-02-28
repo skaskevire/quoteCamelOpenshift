@@ -5,10 +5,13 @@ public class Quote {
 	private String date;
 	private String port;
 
-	public Quote(String date, String port) {
+	private String applicationId;
+
+	public Quote(String date, String port, String applicationId) {
 		super();
 		this.date = date;
 		this.port = port;
+		this.applicationId = applicationId;
 	}
 
 	public String getPort() {
@@ -17,5 +20,9 @@ public class Quote {
 	
 	public String getDate() {
 		return  date;
+	}
+	
+	public String getApplicationId() {
+		return applicationId;
 	}
 }
