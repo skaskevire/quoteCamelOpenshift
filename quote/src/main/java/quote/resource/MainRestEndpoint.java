@@ -15,7 +15,8 @@ public class MainRestEndpoint extends RouteBuilder {
 			.component("servlet")
 			.contextPath("/")
 			.bindingMode(RestBindingMode.json);
-
+		//interceptSendToEndpoint("seda:quoteAggregator")
+       // .to("mock:result");
 		rest("/getQuote/")
 			.get("/").to("direct:getQuote");
 		
@@ -34,8 +35,10 @@ public class MainRestEndpoint extends RouteBuilder {
 				p -> p.getOut().getBody() != null && 
 				((Quote) p.getOut().getBody()).getMessage() != null	&& 
 				((Quote) p.getOut().getBody()).getTime() != null)
-			.to("direct:processResult");
+			.to("direct:processResult").id("direct:processResult").routeId("gc");
 			from("direct:processResult").to("bean:resultProcessor?method=process")
 			.endRest();
+			
+
 	}
 }
