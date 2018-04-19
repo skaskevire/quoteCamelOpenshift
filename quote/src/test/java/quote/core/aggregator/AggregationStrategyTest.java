@@ -9,7 +9,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import quote.resource.QuoteResponseBusinessModel;
+import quote.resource.entity.Quote;
 
 public class AggregationStrategyTest {
 	@Mock
@@ -36,19 +36,19 @@ public class AggregationStrategyTest {
 
 	@Test
 	public void messageAppended() {
-		Mockito.doReturn(new QuoteResponseBusinessModel("REST", "date", null)).when(newMessage).getBody();
-		Mockito.doReturn(new QuoteResponseBusinessModel("REST",null, "message")).when(oldMessage).getBody();
+		Mockito.doReturn(new Quote("date", null)).when(newMessage).getBody();
+		Mockito.doReturn(new Quote(null, "message")).when(oldMessage).getBody();
 		Exchange result = aggregator.aggregate(oldExchange, newExchange);
 
-		Assert.assertEquals("message", ((QuoteResponseBusinessModel) result.getOut().getBody()).getMessage());
+		Assert.assertEquals("message", ((Quote) result.getOut().getBody()).getMessage());
 	}
 
 	@Test
 	public void dateAppended() {
-		Mockito.doReturn(new QuoteResponseBusinessModel("REST", null, "message")).when(newMessage).getBody();
-		Mockito.doReturn(new QuoteResponseBusinessModel("REST", "date", null)).when(oldMessage).getBody();
+		Mockito.doReturn(new Quote(null, "message")).when(newMessage).getBody();
+		Mockito.doReturn(new Quote("date", null)).when(oldMessage).getBody();
 		Exchange result = aggregator.aggregate(oldExchange, newExchange);
 
-		Assert.assertEquals("date", ((QuoteResponseBusinessModel) result.getOut().getBody()).getTime());
+		Assert.assertEquals("date", ((Quote) result.getOut().getBody()).getTime());
 	}
 }

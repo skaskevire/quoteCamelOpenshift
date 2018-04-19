@@ -2,6 +2,7 @@ package quote.core.vendors;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
+import org.apache.camel.ProducerTemplate;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,12 +14,13 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import quote.core.test.config.TestConfiguration;
-import quote.resource.QuoteRequestBusinessModel;
-import quote.resource.QuoteResponseBusinessModel;
+import quote.resource.entity.Quote;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfiguration.class)
 public class NameVendorTest {
+	@Mock
+	ProducerTemplate quoteAggregator;
 	@Mock
 	Exchange exchange;
 	@Mock
@@ -35,17 +37,13 @@ public class NameVendorTest {
 	}
 
 	@Test
-	public void testQuoteWithNameCreated()
+	public void testQuoteWithDateCreated()
 	{
-		QuoteRequestBusinessModel qrbm = new QuoteRequestBusinessModel();
-		qrbm.setName("abc");
-		qrbm.setProcessingType("REST");
-		Mockito.when(exchange.getIn()).thenReturn(message);
 		Mockito.when(exchange.getOut()).thenReturn(message);
-		Mockito.when(message.getBody(QuoteRequestBusinessModel.class)).thenReturn(qrbm);
-		
-		nameVendor.append(exchange);
 
-		Mockito.verify(message).setBody(Mockito.any(QuoteResponseBusinessModel.class));
+		nameVendor.append("nameString", exchange);
+
+		Mockito.verify(quoteAggregator).send(exchange);
+		Mockito.verify(message).setBody(Mockito.any(Quote.class));
 	}
 }

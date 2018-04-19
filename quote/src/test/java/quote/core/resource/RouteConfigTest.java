@@ -15,10 +15,11 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.epam.quote.GetQuoteRequest;
+import com.epam.quote.GetQuoteRequestMessage;
 import com.epam.quote.GetQuoteResponse;
 
 import quote.main.Application;
-import quote.resource.QuoteRequestBusinessModel;
 import quote.resource.entity.Quote;
 
 @RunWith(CamelSpringBootRunner.class)
@@ -39,12 +40,9 @@ public class RouteConfigTest {
 	public void routeProcessRestGetQuoteRequest() throws Exception {
 		resultR.expectedMessageCount(1);
 		Map<String, Object> headers = new HashMap<String, Object>();
-		QuoteRequestBusinessModel qrbm = new QuoteRequestBusinessModel();
-		qrbm.setName("abc");
-		qrbm.setProcessingType("REST");
-		headers.put("name", qrbm);
+		headers.put("name", "abc");
 
-		Quote quote = (Quote) template.sendBodyAndHeaders("direct:getQuote", ExchangePattern.InOut, qrbm, null);
+		Quote quote = (Quote) template.sendBodyAndHeaders("direct:getQuoteRest", ExchangePattern.InOut, null, headers);
 
 		Assert.assertEquals(quote.getMessage(), "Hello abc");
 		Assert.assertNotNull(quote.getTime());
@@ -55,13 +53,12 @@ public class RouteConfigTest {
 	@Test
 	public void routeProcessSoapGetQuoteRequest() throws Exception {
 		resultS.expectedMessageCount(1);
-		Map<String, Object> headers = new HashMap<String, Object>();
-		QuoteRequestBusinessModel qrbm = new QuoteRequestBusinessModel();
-		qrbm.setName("abc");
-		qrbm.setProcessingType("SOAP");
-		headers.put("name", qrbm);
+		GetQuoteRequest gqr = new GetQuoteRequest();
+		GetQuoteRequestMessage gqrm = new GetQuoteRequestMessage();
+		gqr.setMessage(gqrm);
+		gqrm.setName("abc");
 
-		GetQuoteResponse quote = (GetQuoteResponse) template.sendBodyAndHeaders("direct:getQuote", ExchangePattern.InOut, qrbm, null);
+		GetQuoteResponse quote = (GetQuoteResponse) template.sendBodyAndHeaders("direct:getQuoteSoap", ExchangePattern.InOut, gqr, null);
 
 		Assert.assertEquals(quote.getMessage().getMessage(), "Hello abc");
 		Assert.assertNotNull(quote.getMessage().getTime());
