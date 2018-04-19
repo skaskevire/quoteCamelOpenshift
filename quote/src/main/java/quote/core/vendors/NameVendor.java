@@ -1,28 +1,20 @@
 package quote.core.vendors;
 
 import org.apache.camel.Exchange;
-import org.apache.camel.Produce;
-import org.apache.camel.ProducerTemplate;
 import org.springframework.stereotype.Component;
 
-import quote.resource.entity.Quote;
+import quote.resource.QuoteRequestBusinessModel;
+import quote.resource.QuoteResponseBusinessModel;
 
 @Component(value = "nameVendorBean")
 public class NameVendor {
 	private static final String MSG_PATTERN = "Hello %s";
-	@Produce(uri = "seda:quoteAggregator")
-	private ProducerTemplate quoteAggregator;
 
-	public void append(String name, Exchange exchange) {
-		exchange.getOut().setBody(new Quote(null, String.format(MSG_PATTERN, name)));
-		quoteAggregator.send(exchange);
-	}
+	public void append(Exchange exchange) {
+		QuoteRequestBusinessModel qrbm = exchange.getIn().getBody(QuoteRequestBusinessModel.class);
 
-	public ProducerTemplate getQuoteAggregator() {
-		return quoteAggregator;
-	}
-
-	public void setQuoteAggregator(ProducerTemplate quoteAggregator) {
-		this.quoteAggregator = quoteAggregator;
+		String name = qrbm.getName();
+		exchange.getOut().setBody(
+				new QuoteResponseBusinessModel(qrbm.getProcessingType(), null, String.format(MSG_PATTERN, name)));
 	}
 }

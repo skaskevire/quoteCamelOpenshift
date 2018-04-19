@@ -3,16 +3,22 @@ package quote.core.aggregator;
 import org.apache.camel.Exchange;
 import org.apache.camel.processor.aggregate.AggregationStrategy;
 
-import quote.resource.entity.Quote;
+import quote.resource.QuoteResponseBusinessModel;
 
 public class QuoteAggregationStrategy implements AggregationStrategy {
 	public Exchange aggregate(Exchange oldExchange, Exchange newExchange) {
-		if (oldExchange == null) {
+		if (oldExchange == null ) {
 			return newExchange;
 		}
 
-		Quote quoteToMerge = (Quote) newExchange.getIn().getBody();
-		Quote result = (Quote) oldExchange.getIn().getBody();
+		QuoteResponseBusinessModel quoteToMerge = (QuoteResponseBusinessModel) newExchange.getIn().getBody();
+		
+		QuoteResponseBusinessModel result = null;
+		if(oldExchange.getIn().getBody() != null && oldExchange.getIn().getBody() instanceof QuoteResponseBusinessModel)
+		{
+			result = (QuoteResponseBusinessModel) oldExchange.getIn().getBody();
+		}
+		
 		if (result != null) {
 			if (result.getMessage() != null) {
 				quoteToMerge.setMessage(result.getMessage());
@@ -20,6 +26,7 @@ public class QuoteAggregationStrategy implements AggregationStrategy {
 			if (result.getTime() != null) {
 				quoteToMerge.setTime(result.getTime());
 			}
+			quoteToMerge.setProcessingType(result.getProcessingType());
 		} else {
 			oldExchange.getOut().setBody(quoteToMerge);
 		}
