@@ -1,4 +1,4 @@
-package quote.resource;
+package quote.resource.rest;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
@@ -6,6 +6,8 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.http.common.HttpMessage;
 import org.apache.camel.model.rest.RestBindingMode;
 import org.springframework.stereotype.Component;
+
+import quote.resource.QuoteRequestBusinessModel;
 
 @Component
 public class MainRestEndpoint extends RouteBuilder{

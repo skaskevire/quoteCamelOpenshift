@@ -1,4 +1,4 @@
-package quote.resource;
+package quote.resource.soap;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
@@ -6,6 +6,8 @@ import org.springframework.stereotype.Component;
 
 import com.epam.quote.GetQuoteResponse;
 import com.epam.quote.GetQuoteResponseMessage;
+
+import quote.resource.QuoteResponseBusinessModel;
 
 @Component
 public class QuoteSoapResponseConverter implements Processor{

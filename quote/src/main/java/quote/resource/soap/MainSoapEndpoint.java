@@ -1,4 +1,4 @@
-package quote.resource;
+package quote.resource.soap;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
@@ -6,6 +6,8 @@ import org.apache.camel.builder.RouteBuilder;
 import org.springframework.stereotype.Component;
 
 import com.epam.quote.GetQuoteRequest;
+
+import quote.resource.QuoteRequestBusinessModel;
 
 @Component
 public class MainSoapEndpoint extends RouteBuilder{
