@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.ProducerTemplate;
+import org.apache.camel.builder.AdviceWithRouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.spring.CamelSpringBootRunner;
 import org.apache.camel.test.spring.MockEndpoints;
@@ -24,7 +25,6 @@ import quote.resource.entity.Quote;
 @RunWith(CamelSpringBootRunner.class)
 @MockEndpoints
 @SpringBootTest(classes = Application.class)
-
 public class RouteConfigTest {
 	@Autowired
 	private ProducerTemplate template;
@@ -36,7 +36,16 @@ public class RouteConfigTest {
 	private MockEndpoint resultR;
 
 	@Test
-	public void routeProcessRestGetQuoteRequest() throws Exception {
+	public void routeProcessRestGetQuoteRequest() throws Exception {		
+	    AdviceWithRouteBuilder weaveAddLastRestEnpoint = new AdviceWithRouteBuilder() {
+
+	        @Override
+	        public void configure() throws Exception {
+	        	weaveAddLast().to("mock:endR");
+	        }
+	    };
+	    template.getCamelContext().getRouteDefinition("convertRestResponse")
+        .adviceWith(template.getCamelContext(), weaveAddLastRestEnpoint);	    
 		resultR.expectedMessageCount(1);
 		Map<String, Object> headers = new HashMap<String, Object>();
 		QuoteRequestBusinessModel qrbm = new QuoteRequestBusinessModel();
@@ -54,6 +63,15 @@ public class RouteConfigTest {
 	
 	@Test
 	public void routeProcessSoapGetQuoteRequest() throws Exception {
+	    AdviceWithRouteBuilder weaveAddLastSoapEnpoint = new AdviceWithRouteBuilder() {
+
+	        @Override
+	        public void configure() throws Exception {
+	        	weaveAddLast().to("mock:endS");
+	        }
+	    };
+	    template.getCamelContext().getRouteDefinition("convertSoapResponse")
+        .adviceWith(template.getCamelContext(), weaveAddLastSoapEnpoint);
 		resultS.expectedMessageCount(1);
 		Map<String, Object> headers = new HashMap<String, Object>();
 		QuoteRequestBusinessModel qrbm = new QuoteRequestBusinessModel();

@@ -17,7 +17,11 @@ public class QuoteRouteConfig extends RouteBuilder {
 				.to("direct:restResponseRoute")
 			.otherwise()
 				.to("direct:soapResponseRoute");		
-		from("direct:soapResponseRoute").to("bean:quoteSoapResponseConverter").to("mock:endS");
-		from("direct:restResponseRoute").to("bean:quoteRestResponseConverter").to("mock:endR");		
+		from("direct:soapResponseRoute")
+			.routeId("convertSoapResponse")
+			.to("bean:quoteSoapResponseConverter");
+		from("direct:restResponseRoute")
+			.routeId("convertRestResponse")
+			.to("bean:quoteRestResponseConverter");		
 	}
 }
