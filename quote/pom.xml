@@ -89,6 +89,25 @@
 	</properties>
 	<build>
 		<plugins>
+		      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>1.7</version>
+        <executions>
+          <execution>
+            <id>add-source</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>add-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>src/generated/java</source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
@@ -98,7 +117,6 @@
 				<artifactId>fabric8-maven-plugin</artifactId>
 				<version>3.5.37</version>
 				<configuration>
-					<generateRoute>true</generateRoute>
 					<images>
 						<image>
 							<name>quote-image</name>
